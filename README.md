@@ -256,3 +256,19 @@ Under the outputs secion, terraform provides the output values. It becomes easie
 In documentation: look for attributes reference
 
 https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section02/attributes.tf
+
+
+
+************************************************************************************
+
+Create a new file
+
+reference.tf
+
+  Add resources... 
+  
+  Then run $ terraform plan
+
+aws_eip_associationHave
+https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section02/reference.tf
+
