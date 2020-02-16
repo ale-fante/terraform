@@ -1,3 +1,5 @@
+To activate env: source venv/bin/activate
+
 # terraform
 ## To install on mac:
 
