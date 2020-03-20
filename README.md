@@ -274,3 +274,6 @@ reference.tf
 aws_eip_associationHave
 https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section02/reference.tf
 
+
+
+Instances:https://www.terraform.io/docs/providers/aws/r/instance.html
