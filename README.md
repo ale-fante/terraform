@@ -275,5 +275,30 @@ aws_eip_associationHave
 https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section02/reference.tf
 
 
+Use AWS throughout demos. 
+
+- To create an ec2 instance. Must provide an authentication mechanism. 
+  Select Static credentials. 
+  Look at other options here: https://www.terraform.io/docs/providers/aws/index.html
+  
+- Go to Services > IAM > Users > Create New user (programatic access) > Attach existing policies > Admin access 
+- On make directory and within it create file first_ec2.tf
+
+Set up initial configuration on .tf file
+
+provider "aws" { 
+  region = "XXX"
+  access_key = "XXXXXXXXXXXXX"
+  secret_key = "XXXXXXXXXXXXXCXXXXX"
+}
+
+then specify the resource type
+
+resource "aws_instance" "nameofinstance" {
+	ami = "ami-xxxxxxxxxx" # this changes depending on the region
+	instance_type = "t2.micro"
+}
+
+ Ensure you look at the reference type
 
 Instances:https://www.terraform.io/docs/providers/aws/r/instance.html
