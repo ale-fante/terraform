@@ -10,13 +10,13 @@ Let's take an example:
  
  What if you want a complete end to end solution? 
  
- ## Provisioners are used to execute scripts on local or remote machines as part of resource creation or destruction
+ ##### Provisioners are used to execute scripts on local or remote machines as part of resource creation or destruction
  
  As an example: On creation of Web-server, execute a script which installs nginx web-server.
  
  Create EC2. -> install Nginx webserver
  
- DEMO:
+ ## DEMO:
  
  provisioners.tf
  
@@ -30,6 +30,8 @@ inline = [
   "sudo systemctl start"
 ]
 }
+
+
 
 
 save
