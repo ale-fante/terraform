@@ -35,15 +35,6 @@ On linux:
   - move to root
   - unzip terraform_0.12.20_linux_amd64.zip
 
-AWS Management Console
-======================
-1) Go to AWS management console
-2) Go to users
-3) Create new user with programmatic access
-4) Attach existing policies with admin access
-5) Create user
-
-You will then get an access key ID and a secret access key
 
 Launch first server through Terraform
 =====================================
