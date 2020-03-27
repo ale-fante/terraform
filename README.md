@@ -129,6 +129,6 @@ Terraform State files
 
 - All the information from the state file is displayed
   
-  	$ terraform show 
+  		$ terraform show 
 
 
