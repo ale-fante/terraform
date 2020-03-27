@@ -1,39 +1,42 @@
-To activate env: source venv/bin/activate
+Infrastructure as Code!
+-----------------------
 
-# terraform
-## To install on mac:
+There are various types of tools that can allow you to deploy infrastructure as code: Terraform, CloudFormation, Heat, Ansible, SaltStack, Chef, Puppet and others.
 
-$ brew install terraform
+Which tool to use?
+------------------
+Ansible, Chef, Puppet are configuration management tools which means that they are primarily designed to install and manage software on existing servers.
+
+Terraform, CloudFormation are orchestration tools which basically means they can provision the servers and infrastructure by themselves. 
+
+Configuration Management tools can do some degree of infrastructure provisioning; however it's good to consider some tools are going to be better for certain type of tasks.
+
+(e.g. Ansible can be used to launch ec2 instances just like in Terraform)
+
+
+Install Terraform
+=================
+
+To install on mac:
+------------------
+
+	$ brew install terraform
 
 (Brew takes care of the environment part)
 
-## on linux:
+On linux:
+---------
 
-Download package
-on history, right click on downloaded package and select "copy link address" from the drop down
+1. Download binary from https://www.terraform.io/downloads.html
+2. Or through the terminal:
 
-### On the terminal:
+		$ wget https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip
 
-wget https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip
+  - move to root
+  - unzip terraform_0.12.20_linux_amd64.zip
 
-- move to root
-- unzip terraform_0.12.20_linux_amd64.zip
-
-____________________________________
-____________________________________
-
-1) Download Atom
-2) On Atom, go to "Install a package"
-3) install language-terraform plugin
-4) Add terraform project folder to Atom
-5) Open examle.tf.txt
-6) To start, we will use the AWS provider
-7) Get AWS Free Tier personal account
-____________________________________
-____________________________________
-
-
-*************************************************************************************
+AWS Management Console
+======================
 1) Go to AWS management console
 2) Go to users
 3) Create new user with programmatic access
@@ -42,263 +45,90 @@ ____________________________________
 
 You will then get an access key ID and a secret access key
 
-- Create a folder
-- Open it on atom
-- Right click, and create a new file named first_ec2.tf
+Launch first server through Terraform
+=====================================
 
-For authentication, use static credentials.
+1) Select provider. In this example, we will be using the AWS provider:
+	https://www.terraform.io/docs/providers/aws/index.html
 
-- Get aws provider access usage code snippet:
-
-provider "aws" {
-	region = ""
-	access_key = ""
-	secret_key = ""
-}
-*************************************************************************************
-
-Spin up a server:
-
-EC2 Resource > Resources > aws_instance
-
-resource "aws_instance"  "myec2" {
-	# Required fields
-	ami = " "
-	insstance_type = "t2.micro"  # This is the free tier option
-}
-
-Select operating system, configure instance details
-copy ami ID (changes depending on the region)
-
-*************************************************************************************
-
-Go to the folder you created on the terminal
-Run:
-
-$ terraform init
-
-- Notice that another folder is automatically created. 
-
-$ terraform plan
-
-This last command will display the terraform plan. (Displaying the configurations you've set)
+2) Select type of credentials. For authentication, we will use static credentials.
 
 
-$ terraform apply
+		provider "aws" {
+  			region     = "us-west-2"
+  			access_key = "my-access-key"
+  			secret_key = "my-secret-key"
+		}
 
-This last command will apply the configuration you've specified
-
-*************************************************************************************
-
-
-Note that every region has a different AMI ID. The AMI ID's keeps on changing so make sure you use the latest AMI ID from the AWS console similar to the way it is shown in the video.
-
-
-Resource Code:
-
-https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section01/first_ec2.tf
-
-*************************************************************************************
-
-Providers:
-
-- Terraform has several providers. 
-- Depending upon where you want to launch your infrastructure
-- Look for appropriate provider, depending on your need. 
-
-You must add specific authentication tokens for the given provider. 
-
-- Terraform downloads the appropriate provider plugins. 
-
-Google: Terraform providers
-- Terraform categorizers providers by category. 
-- The provider name cannot change because it's a name given by Terraform
+3) Go into AWS Management Console. From Services, select IAM.
+4) From the menu, select users.
+	- Create New user (programatic access) > Attach existing policies > Admin access
+5) Access Key and Secret key will be created.
 
 
-# create new file
+		mkdir terraformfiles
+		
+6) Within the directory, create file: first_ec2.tf
 
-- bitbucket.tf
+7) Set up initial configuration on first_ec2.tf file
 
+		provider "aws" { 
+			# Specify which region
+  			region = "XXX"
+			# Add user keys
+  			access_key = "XXXXXXXXXXXXX"
+  			secret_key = "XXXXXXXXXXXXXCXXXXX"
+		}
 
-Paste provider details there
-
-provider "bitbucket" {
-	username = "GobBluthe"
-	password = "idoillusions"
-}
-
-run $ terraform init # this downloads the plugin associated with the bitbucket provider
-$ terraform plan  #this will give an error
-
-$ terraform init  #this will actually download the plugin associated with the provider
-
-$ terraform apply
+8) Specify the resource type within first_ex2.tf (Review Argument Reference: https://www.terraform.io/docs/providers/aws/d/instance.html)
 
 
-Resources:
-- Resources are the reference to an individual service.
-- e.g. For a service of ec2 you will have some resources...
+		resource "aws_instance" "myecc2" {
+			# aws_instance = resource name
+			# lb = name we have given this resource  [aws_eip.lb or for the one below aws_s3_bucket.mys3]
+			# Note that every region has a different AMI ID.
+			ami = "XXXXXXXXX" 
+			instance_type = "t2.micro"
+		}
+		
+		
+- Select operating system, configure instance details
+- copy ami ID (changes depending on the region)
 
+		
+9) Save and and run:	
 
-resource "" {
-	... add required arguments ... 
-}
+		$ terraform init
 
-See https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section01/first_ec2.tf
+ - Notice that another folder is automatically created. 
 
-$ terraform init
+		$ terraform plan
 
-$ terraform plan
+ - This last command will display the terraform plan. (Displaying the configurations you've set)
 
-*************************************************************************************
+		$ terraform apply
+
+ - This last command will apply the configuration you've specified.
+
 
 Terraform Destroy
+=================
 
-# This command checks for the resources that were created. 
-$ terraform destroy 
+- This command checks for the resources that were created. 
 
-
-# To target a specific instance:
-$ terraform destroy -target aws_instance.myec2
+		$ terraform destroy 
 
 
-
-*************************************************************************************
-State files
-
-- Have all the information associated with specific instances.
-- State files associated with resources get removed when resources get destroyed
-
-terraform.tfstate file has metadata information about terraform version, etc. 
-
-$ terraform apply
-
-# To create a new ec2 instance. 
-$ yes
-
-$ terraform plan
-
-# Verify what the plan is before you run:
-$ terraform apply
-
-************************************************************************************
-
-Desired state and current state
-
-  i) Desired State: EC2 = instance_type = "t2.micro"  # What is explicitly stated in code. If you don't specify it, terraform will not do anything there. Always mention things on your code so it becomes part of the desired state.
-
-  ii) Current state: "instance_state": "stopped", && "instance_type": "t2.nano"
-
-  Desired state == current state
-
-Go back to the console and stop the ec2 instance. Change the type to t2.nano
-
-$ terraform refresh # fetches the information 
-
-# You will note that the state file will be updated
-
- $terraform plan
-
-# The state is being refreshed. 
-
- $ terraform apply
-
-# In a production environment, the desired state and the current state are different. 
-
-************************************************************************************
-
-Terraform commands: State files
-
-# All the information from the state file is displayed
-  $ terraform show 
-
-earlier: security group is default.
+ - To target a specific instance:
+ 
+		$ terraform destroy -target aws_instance.myec2
 
 
-************************************************************************************
+Terraform State files
+=====================
 
-Understanding Attributes
-
-Terraform has a capability to output the attribute of a resource with the output values
-
-add a attributes.tf file
-
-
-Go to the console
-
-Open Elastic IPs
-
-Copy elastic IP
-
-
-	resource "aws_eip" "lb" {
-		# aws_eip = resource name
-		# lb = name we have given this resource  [aws_eip.lb or for the one below aws_s3_bucket.mys3]
-		vpc = true
-	}
-
-	output "eip" {
-		value = aws_eip.lb.public_ip
-	}
-
-
-
-	resource "aws_s3_bucket" "mys3" {
-		bucket = "kplabs-attribute-demo-001"
-	}
-
-	output "mys3bucket" "mys3"{
-		bucket = "kplabs-attribute-demo-001"
-	}
-
-$ terraform apply
-
-Under the outputs secion, terraform provides the output values. It becomes easier to look at the outputs instead of going to the console
-
-In documentation: look for attributes reference
-
-https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section02/attributes.tf
-
-
-
-************************************************************************************
-
-Create a new file
-
-reference.tf
-
-  Add resources... 
+- All the information from the state file is displayed
   
-  Then run $ terraform plan
-
-aws_eip_associationHave
-https://github.com/zealvora/terraform-beginner-to-advanced-resource/blob/master/section02/reference.tf
+  	$ terraform show 
 
 
-Use AWS throughout demos. 
-
-- To create an ec2 instance. Must provide an authentication mechanism. 
-  Select Static credentials. 
-  Look at other options here: https://www.terraform.io/docs/providers/aws/index.html
-  
-- Go to Services > IAM > Users > Create New user (programatic access) > Attach existing policies > Admin access 
-- On make directory and within it create file first_ec2.tf
-
-Set up initial configuration on .tf file
-
-provider "aws" { 
-  region = "XXX"
-  access_key = "XXXXXXXXXXXXX"
-  secret_key = "XXXXXXXXXXXXXCXXXXX"
-}
-
-then specify the resource type
-
-resource "aws_instance" "nameofinstance" {
-	ami = "ami-xxxxxxxxxx" # this changes depending on the region
-	instance_type = "t2.micro"
-}
-
- Ensure you look at the reference type
-
-Instances:https://www.terraform.io/docs/providers/aws/r/instance.html
