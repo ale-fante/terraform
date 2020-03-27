@@ -115,6 +115,7 @@ Terraform Destroy
 		$ terraform destroy -target aws_instance.myec2
 
 
+
 Terraform State files
 =====================
 
@@ -122,4 +123,7 @@ Terraform State files
   
   		$ terraform show 
 
+ - To show the current status/state
+ 
+ 		$ terraform refresh
 
